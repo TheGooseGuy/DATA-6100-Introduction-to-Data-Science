@@ -2,3 +2,5 @@
 DATA*6100 Intro to DS offered by University of Guelph, 2024 Fall
 
 Also serve as an archive for materials of [Introduction to Statistical Learning](https://www.statlearning.com/).
+
+Credits goes to Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani, and my professor Mihai Nica. 
