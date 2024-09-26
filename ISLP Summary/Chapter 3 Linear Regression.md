@@ -65,7 +65,7 @@ $$\hat y=\hat\beta_1x_1+\hat\beta_2x_2+\cdots+\hat\beta_px_p$$
 Use least squares approach to minimize the sum of squared residuals.  
 $\text{RSS}=\sum_{i=1}^n(y_i-\hat y_i)^2=\sum_{i=1}^n(y_i-\hat\beta_0-\hat\beta_1x_{i1}-\hat\beta_2x_{i2}-\cdots-\hat\beta_p x_{ip})^2$
 ## Some Important Questions
-### Is There a Relationship Between the Response and Predictors?
+### Relationship Between the Response and Predictors
 $H_0$: $\beta_1=\beta_2=\cdots=\beta_p=0$  
 $H_1$: at least one $\beta_j$ is non-zero  
 
