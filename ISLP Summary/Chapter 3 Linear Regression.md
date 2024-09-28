@@ -10,7 +10,7 @@ $\beta_0$: intercept
 $\beta_1$: slope  
 ## Estimating the Coefficients
 $(x_1,y_1), (x_2,y_2), \dots, (x_n,y_n)$: $n$ observation pairs, which consists of a measurement of $X$ and a measurement of $Y$  
-$\hat y_i= \hat\beta_0+\hat\beta_1x_i$: the *lease square line*, the prediction for $Y$ based on the $i$th value of $x$  
+$\hat y_i= \hat\beta_0+\hat\beta_1x_i$: the *least square line*, the prediction for $Y$ based on the $i$th value of $x$  
 $e_i = y_i - \hat y_i$: the $i$th residual (observed_value - predicted_response_value)  
 *residual sum of squares* $\text{RSS} = e_1^2+e_2^2+\cdots+e_n^2$  
 *least square approach*: used to choose $\hat\beta_0$ and $\hat\beta_1$ to minimize the $\text{RSS}$
@@ -149,4 +149,70 @@ $$y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\epsilon_i=
 
 There will always be one fewer dummy variable than the number of levels. Here we call the level with no dummy variable (A) the *baseline*. We use dummy variables to incorporate both quantitative and qualitative predictors.
 ## Extensions of the Linear Model
-### Removing the Additive Assumption
+The stardard linear regression model made several highly restrictive assumptions(additive & linear) that are often violated in practice.
+### Additive Assumption
+Additive assumption: the effect of increasing on unit on one predictor on response variable is independent of the amount spent on the other predictors.  
+This is often not correct because the increase in one predictor may have effect on other predictors, this is called <u>*interaction*</u> effect.  
+For example: $Y=\beta_0+\beta_1X_1+\beta_2X-2+\epsilon$  
+The model says that regardless of $X_2$, a one-unit increase in $X_1$ is associated with a $\beta_1$-unit increase in Y.  
+To extend this model, we add an *interaction term* $X_1X_2$,  
+$Y=\beta_0+\beta_1X_1+\beta_2X-2+\beta_3X_1X_2+\epsilon$  
+$=\beta_0+(\beta_1+\beta_3X_2)X_1+\beta_2X_2+\epsilon$  
+$=\beta_0 +\tilde \beta_1X_1+\beta_2X_2+\epsilon$  
+$(\tilde\beta_1=\beta_1+\beta_3X_2)$  
+We can interprete $\beta_3$ as the increase in the effectiveness of $X_1$ associated with a one-unit increase in $X_2$ (or vice versa)
+
+Sometimes the interaction term($X_1X_2$) has very small $p$-value, but the associated main effects($X_1,X_2$) do not. The *hierachical principle* states that *if we include an interaction in a model, we should also include the main effects, even if the $p$-value associated with their coefficients are not significant$.
+### Non-linear Relationships
+Sometimes the true relationship between the response and predictors are non-linear. We use *polynomial regression* to accommodate non-linear relationships.  
+
+For example, when the data set seems to have a quadratic shape, then the model of form $Y=\beta_0+\beta_1X_1+\beta_2X_1^2+\epsilon$ might provide a better fit than $Y=\beta_0+\beta_1X_1+\epsilon$.  
+Here the model is using a non-linear funtion $X_2=X_1^2$, but it's still a linear model.
+## Potential Problems
+Many problems may occur when fitting a linear regression model to a particular data set.
+### 1. Non-linearity of the Data
+Assumption: data is linear
+*Residual plots* are a useful graphic tool for identifying non-linearity. We plot the residuals $e_i=y_i-\hat y_i$ versus the predictor $x_i$.  
+EX.:  
+![alt text](pic_residual_plots.png)
+A strong pattern in the residuals indicates non-linearity in the data.  
+
+In the case of multiple regression model, we plot the residuals versus the predicted (*or fitted*) values $\hat y_i$. The residual plot should show now discernible pattern, otherwise there might be something wrong with the model.
+
+If the residual plot indicates that there are non-linear associations in the data, a simple approach is to use non-linear trasnformations of the predictors ($\log X, \sqrt X, \text{and} X^2$). More approaches are discussed later in the book.
+### 2. Correlation of Error Terms
+Assumption: error terms $e_1, e_2, e_3\dots e_n$ are uncorrelated. 
+
+In fact there is correlation among the error terms (frequently occur in *time series data*, which consists of observations for which measurements are obtained at discrete points in time), then the estimated standard errors will tend to underestimate the true standard errors. As a result, confidence and prediction intervals will be narrower than they should be.
+### 3. Non-consitant Variance of Error Terms
+Assumption: error terms have a constant variance, $Var(\epsilon_i)=\sigma^2$.  
+The standard error, confidence intervals, and hypothesis tests associated with the linear model rely upon this assumption.
+![alt text](pic_non-constant_variance.png)
+Possible solution: transform the respone $Y$ using a concave function such as $\log Y$ (right pic) or $\sqrt Y$, which leads to shrinkage of the larger responses, leading to a reduction in heteroscedasticity.
+
+### 4. Outliers
+An outlier is a point for which $y_i$ is far from the value predicted by the model.  
+
+Typically an outlier has little effect on the least squares fit. But it can cause other problems, for example, wrong $\text{RSE}$ or confidence intervals or $p$-values or $R^2$.
+
+In practice, it can be difficult to decide how large a residual needs to be before we consider the point to be an outlier. We can use *studentized residuals* (devide each residual $e_i$ by its estimated standard error) to address this problem. Observations whose studentized residuals are greater than 3 in absolute value are possible outliers. 
+### 5. High Leverage Points
+Observations with unusual $y_i$ is usually an outlier. Observations with unusual $x_i$ usually have *high leverage*.
+
+High leverage observations tend to have a sizable impact on the estimated regression line. 
+
+We compute the *leverage statistic* to quantify an observation's leverage, for a simple linear regression,
+$$h_i=\frac{1}{n}+\frac{(x_i=\bar x)^2}{\sum_{i'=1}^n(x_{i'}-\bar x)^2}$$
+The leverage statistic $h_i$ is always between $\frac{1}{n}$ and $1$, and the average leverage for all the observations is always equal to $(p+1)/n$. So if a given observation has a leverage statistic that greatly exceeds $(p+1)/n$, then we may suspect that the corresponding point has high leverage.
+### 6. Collinearity
+*Collinearity* refers to the situation in which two or more predictor variables are closely related to one another.
+
+Collinearity reduces the accuracy of the estimates of the regression coefficients, which causes the standard error for $\hat\beta_j$ to grow, which results in a decline in teh $t$-statistic. As a result, we may fail to reject $H_0:\beta_j=0$.
+
+- [ ] To-do: ways to deal with collinearity.
+# Comparison of Linear Regression with $K$-Nearest Neighbors
+*$K$-nearest neighbors regression (KNN regression)*  
+Given a value for $K$ and a prediction point $x_0$, KNN regression first identifies the $K$ training observations that are closest to $x_0$, represented by $N_0$. It then estimates $f(x_0)$ using the average of all the training responses in $N_0$.
+$$\hat f(x_0)=\frac{1}{K}\sum_{x_i\in N_0}y_i$$
+
+The parametric approach (like linear regression) will outperform the non-parametric apprach (like KNN regression) if the parametric approach form that has been selected is close to the true form of $f$.
